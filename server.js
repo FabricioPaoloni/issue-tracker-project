@@ -5,7 +5,8 @@ const bodyParser  = require('body-parser');
 const expect      = require('chai').expect;
 const cors        = require('cors');
 require('dotenv').config();
-
+const mongoose = require('mongoose');
+const myDB = require('./connection')
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
@@ -33,11 +34,28 @@ app.route('/')
     res.sendFile(process.cwd() + '/views/index.html');
   });
 
+//connect to the database
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+
+//test the connection with MongoDB and log to the console.
+let connection = mongoose.connection;
+connection.on('error', console.error.bind(console, 'connection error:'));
+connection.once('open', () => {
+  console.log('MongoDB connection established succesfully');
+});
+
+
 //For FCC testing purposes
 fccTestingRoutes(app);
 
+
+
 //Routing for API 
-apiRoutes(app);  
+apiRoutes(app);
+
+
+
+
     
 //404 Not Found Middleware
 app.use(function(req, res, next) {
