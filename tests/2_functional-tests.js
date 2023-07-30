@@ -241,7 +241,7 @@ suite('Functional Tests', function () {
                 issue_title: 'invalid id'
             })
             .end((err, res) => {
-                assert.equal(res.status, 500);
+                assert.equal(res.status, 200);
                 assert.equal(res.type, 'application/json');
                 assert.equal(res.body.error, 'could not update');
                 assert.equal(res.body._id, 'asdasdasdasd');
@@ -276,7 +276,7 @@ suite('Functional Tests', function () {
                 _id: `${invalidId}`
             })
             .end((err, res) => {
-                assert.equal(res.status, 500);
+                assert.equal(res.status, 200);
                 assert.equal(res.type, 'application/json');
                 assert.equal(res.body.error, 'could not delete');
                 assert.equal(res.body._id, invalidId);

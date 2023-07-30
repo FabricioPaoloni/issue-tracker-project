@@ -92,12 +92,12 @@ module.exports = function (app) {
         return res.json({ error: 'missing _id' })
       }
       if (!obj.issue_title && !obj.issue_text && !obj.created_by && !obj.assigned_to && !obj.status_text && !obj.open) {
-        return res.json({ error: 'no update field(s) sent', _id: obj._id });
+        return res.json({ error: 'no update field(s) sent', '_id': obj._id });
       }
 
       let doc = await Issue.findById(obj._id);
       if (!doc) {
-        return res.status(500).json({ error: 'could not update', _id: obj._id })
+        return res.json({ error: 'could not update', '_id': obj._id })
       }
       let objKeysArray = Object.keys(obj);
       for (let i = 0; i < objKeysArray.length; i++) {
@@ -111,8 +111,8 @@ module.exports = function (app) {
           res.json({ result: 'successfully updated', _id: updatedDoc._id })
         })
         .catch(err2 => {
-          console.log(err2)
-          res.status(500).json({ error: 'could not update', _id: obj._id })
+          // console.log(err2)
+          return res.json({ error: 'could not update', '_id': obj._id })
         })
     })
 
@@ -122,19 +122,19 @@ module.exports = function (app) {
       if (!req.body._id) {
         return res.json({ error: 'missing _id' })
       }
-
-      try {
+      
+      // try {
         let issue = await Issue.findOneAndDelete({ _id: req.body._id });
         if (!issue) {
-          return res.status(500).json({ error: 'could not delete', _id: req.body._id });
+          return res.json({ error: 'could not delete', '_id': req.body._id });
         }
-        res.json({
+        return res.json({
           result: 'successfully deleted',
-          _id: req.body._id
+          '_id': req.body._id
         })
-      } catch (err3) {
-        res.status(500).json({ error: 'could not delete', _id: req.body._id })
-      }
+      // } catch (err3) {
+      //   res.status(500).json({ error: 'could not delete', _id: req.body._id })
+      // }
 
 
     });
